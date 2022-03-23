@@ -1,43 +1,42 @@
-///  <reference path="base-component.ts" />
-///  <reference path="../decorators/autobind.ts" />
-///  <reference path="../models/drag-drop.ts" />
+import {Draggable} from '../models/drag-drop.js';
+import {Project} from '../models/project.js';
+import Component from './base-component.js';
+import {AutoBind} from "../decorators/autobind.js";
 
-namespace App {
-    export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {
-        private project: Project;
+export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {
+    private project: Project;
 
-        constructor(hostId: string, project: Project) {
-            super('single-project', hostId, false, project.id);
-            this.project = project;
+    constructor(hostId: string, project: Project) {
+        super('single-project', hostId, false, project.id);
+        this.project = project;
 
-            this.configure();
-            this.renderContent();
-        }
+        this.configure();
+        this.renderContent();
+    }
 
-        get persons() {
-            return this.project.people + ' ' + (this.project.people > 1 ? 'persons' : 'person') + ' assigned'
-        }
+    get persons() {
+        return this.project.people + ' ' + (this.project.people > 1 ? 'persons' : 'person') + ' assigned'
+    }
 
-        protected configure() {
-            this.element.addEventListener('dragstart', this.dragStartHandler);
-            this.element.addEventListener('dragend', this.dragEndHandler);
-        }
+    protected configure() {
+        this.element.addEventListener('dragstart', this.dragStartHandler);
+        this.element.addEventListener('dragend', this.dragEndHandler);
+    }
 
-        protected renderContent() {
-            this.element.querySelector('h2')!.textContent = this.project.title;
-            this.element.querySelector('h3')!.textContent = this.persons;
-            this.element.querySelector('p')!.textContent = this.project.description;
-        }
+    protected renderContent() {
+        this.element.querySelector('h2')!.textContent = this.project.title;
+        this.element.querySelector('h3')!.textContent = this.persons;
+        this.element.querySelector('p')!.textContent = this.project.description;
+    }
 
-        @AutoBind
-        dragEndHandler(_event: DragEvent): void {
-            console.log('DragEnd');
-        }
+    @AutoBind
+    dragEndHandler(_event: DragEvent): void {
+        console.log('DragEnd');
+    }
 
-        @AutoBind
-        dragStartHandler(event: DragEvent): void {
-            event.dataTransfer!.setData('text/plain', this.project.id);
-            event.dataTransfer!.effectAllowed = 'move';
-        }
+    @AutoBind
+    dragStartHandler(event: DragEvent): void {
+        event.dataTransfer!.setData('text/plain', this.project.id);
+        event.dataTransfer!.effectAllowed = 'move';
     }
 }
