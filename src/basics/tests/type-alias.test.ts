@@ -14,8 +14,12 @@ describe('Type Alias', function() {
             category: category
         }
 
+        type ID = number | string;
+        const userId: ID = '1';
+
         console.info(category);
         console.info(product);
+        console.info(userId);
     });
 
     it('should support object type alias', function() {
